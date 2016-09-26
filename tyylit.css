@@ -1,0 +1,39 @@
+/*tyylitiedosto, vt2*/
+
+table { 
+	border-spacing: 0px;
+	/*width:100px;
+	height:100px;*/
+	border:1px solid black;
+ }
+ 
+ /*
+ table td{
+	 width: 100px;
+	 height:100px;
+	 background:black;
+ }
+ */
+ 
+.musta:nth-child(even) {
+    background: black;
+}
+
+.valko:nth-child(odd) {
+    background: black;
+}
+
+td{
+    text-align:center;
+
+}
+
+.red{
+	background:red;
+}
+
+.white{
+	background:white;
+}
+
+
