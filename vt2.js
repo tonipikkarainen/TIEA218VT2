@@ -4,10 +4,33 @@ window.onload = function() {
 
 	var ruutuLkm = 8;
 	
+	asetaVuoro();
 
+	//var vuoro = Math.round(Math.random()); // arpoo vuoron
+	//console.log(vuoro);
 	
 	var syottoAlue = document.getElementById("ruudukko");
 	
+	//var vuoroAlue = document.createElement("div");
+	//syottoAlue.appendChild(vuoroAlue);
+	/*
+	var redVuoro = document.createElement("img");
+	redVuoro.src = "red.svg";
+	redVuoro.alt ="red";
+	//redVuoro.setAttribute = ("id","vuoro");
+	
+	var blueVuoro = document.createElement("img");
+	blueVuoro.src = "blue.svg";
+	blueVuoro.alt ="blue";
+	//blueVuoro.setAttribute = ("id","vuoro");
+	
+	if(vuoro == 0){
+		vuoroAlue.appendChild(redVuoro);
+	}
+	else
+		vuoroAlue.appendChild(blueVuoro);
+	vuoroAlue.firstChild.setAttribute("id","vuoro");
+	*/
 	var field = syottoAlue.getElementsByTagName("fieldset")[0];
 	
 	// Luodaan radionappulakenttä
@@ -59,7 +82,7 @@ window.onload = function() {
 	
 
 	
-	luoRuudut(8,0);
+	luoRuudut(8,0,vuoro);
 
 	
 }
@@ -77,7 +100,30 @@ function tarkistus(e){
 function luonti(e){
 	e.preventDefault();
 	
+	
+	var vuoro = Math.round(Math.random());
+	
 	var syottoAlue = document.getElementById("ruudukko");
+	
+	var vaihdettava = syottoAlue.lastChild;
+	
+	var vuoroAlue = document.createElement("div"); /// Luodaan täälläkin vuoroalue
+	syottoAlue.replaceChild(vuoroAlue,vaihdettava);
+	
+	var red = document.createElement("img");
+	red.src = "red.svg";
+	red.alt ="red";
+	
+	var blue = document.createElement("img");
+	blue.src = "blue.svg";
+	blue.alt ="blue";
+	
+	if(vuoro == 0){
+		vuoroAlue.appendChild(red);
+	}
+	else
+		vuoroAlue.appendChild(blue); ///
+	vuoroAlue.firstChild.setAttribute("id","vuoro");
 	var input = syottoAlue.getElementsByTagName("input")[0];
 	
 	var uusiField = syottoAlue.getElementsByTagName("fieldset")[1];
@@ -106,45 +152,8 @@ function luonti(e){
 	//var varoitus = document.createTextNode("");
 	
 	var field = syottoAlue.getElementsByTagName("fieldset")[0];
-	luoRuudut(syote,napLkm);
-    /*var varod = document.getElementById("varod");
-	if (isNaN(syote) || syote < 8 || syote > 16){
-	    varod.textContent = "Anna kokonaisluku väliltä 8-16!";
-	}
-	else{
-		varod.textContent = "";		
-		var body = document.getElementsByTagName("body")[0];
-	    var taul = body.getElementsByTagName("table")[0];
-		
-		
-	    body.removeChild(taul);	
-		var uusiTaul = document.createElement("table");
-		body.appendChild(uusiTaul);
-		//var rivi = document.createElement("tr");
-		for(var i=0 ; i<syote ; i++){
-			var rivi=document.createElement("tr");
-			uusiTaul.appendChild(rivi);
-			for(var j=0 ; j<syote ; j++){
-				var solu=document.createElement("td");
-				rivi.appendChild(solu);
-				if( j > ((syote-1)-(napLkm+2-i))){
-				   var red = document.createElement("img");
-		           red.src = "red.svg";
-		           red.alt ="red";
-				   solu.appendChild(red);
-				   }
-				   	
-				if ( j < ((napLkm+2)-(syote-1-i))){
-					var blue = document.createElement("img");
-					blue.src = "blue.svg";
-					blue.alt ="blue";
-					solu.appendChild(blue);
-				}
-					
-			}
-		}
-		ruudunLeveys(syote);
-		ruutuVarit();*/
+	luoRuudut(syote,napLkm,vuoro);
+    
 }
 
 		
@@ -189,7 +198,7 @@ function ruutuVarit(){
 	}
 }
 
-function luoRuudut(syote, napLkm){
+function luoRuudut(syote, napLkm, vuoro){
 	var varod = document.getElementById("varod");
 	if (isNaN(syote) || syote < 8 || syote > 16){
 	    varod.textContent = "Anna kokonaisluku väliltä 8-16!";
@@ -203,12 +212,16 @@ function luoRuudut(syote, napLkm){
 	    body.removeChild(taul);	
 		var uusiTaul = document.createElement("table");
 		body.appendChild(uusiTaul);
+		
+		
+		
 		//var rivi = document.createElement("tr");
 		for(var i=0 ; i<syote ; i++){
 			var rivi=document.createElement("tr");
 			uusiTaul.appendChild(rivi);
 			for(var j=0 ; j<syote ; j++){
 				var solu=document.createElement("td");
+				solu.addEventListener("click",klikkaus);
 				rivi.appendChild(solu);
 				if( j > ((syote-1)-(napLkm+2-i))){
 				   var red = document.createElement("img");
@@ -230,3 +243,235 @@ function luoRuudut(syote, napLkm){
 		ruutuVarit();
 }
 }
+
+function klikkaus(){
+	
+	var vuoroKuva = document.getElementById("vuoro");
+	
+	if(vuoroKuva.alt == "red"){
+		punaisenVuoro(this);
+	}
+	
+	else{
+		sinisenVuoro(this);
+	}
+	
+}
+
+function asetaVuoro(){
+	
+	var vuoro = Math.round(Math.random()); // arpoo vuoron
+	//console.log(vuoro);
+	
+	var syottoAlue = document.getElementById("ruudukko");
+	
+	var vuoroAlue = document.createElement("div");
+	
+	
+	
+	syottoAlue.appendChild(vuoroAlue);
+	
+	var redVuoro = document.createElement("img");
+	redVuoro.src = "red.svg";
+	redVuoro.alt ="red";
+	//redVuoro.setAttribute = ("id","vuoro");
+	
+	var blueVuoro = document.createElement("img");
+	blueVuoro.src = "blue.svg";
+	blueVuoro.alt ="blue";
+	//blueVuoro.setAttribute = ("id","vuoro");
+	
+	if(vuoro == 0){
+		vuoroAlue.appendChild(redVuoro);
+	}
+	else
+		vuoroAlue.appendChild(blueVuoro);
+	vuoroAlue.firstChild.setAttribute("id","vuoro");
+}
+
+function punaisenVuoro(valittu){
+	var kuvat = document.getElementsByTagName("img");
+	
+	var iIndex = valittu.parentNode.rowIndex;
+	var jIndex = valittu.cellIndex;
+	
+	//console.log("i:"+iIndex);
+	//console.log("j:"+jIndex);
+	
+	var red = document.createElement("img");
+	red.src = "red.svg";
+	red.alt ="red";
+	
+	var blue = document.createElement("img");
+	blue.src = "blue.svg";
+	blue.alt ="blue";
+	
+	
+	
+	var oliVihrea;
+	//nollaaVihrea(red,blue,oliVihrea, kuvat);
+	
+	for(var i=0;i<kuvat.length;i++){
+		if(kuvat[i].alt == "redgreen" ){
+			vihr = kuvat[i];
+			oliVihrea = red;
+			vihr.parentNode.replaceChild(oliVihrea,vihr);
+		}
+		if(kuvat[i].alt == "bluegreen"){
+			var vihr = kuvat[i];
+			oliVihrea = blue;
+			vihr.parentNode.replaceChild(oliVihrea,vihr);
+		}
+	}
+	
+	if(valittu.firstChild){
+		
+	var vaihdettava = valittu.firstChild;
+	
+	if(vaihdettava.alt == "red"){
+		var redgreen = document.createElement("img");
+        redgreen.src = "green.svg";
+	    redgreen.alt ="redgreen";
+		valittu.replaceChild(redgreen,vaihdettava);
+	}
+	
+	}
+	else{
+		if(oliVihrea){
+			
+			var iVert = oliVihrea.parentNode.parentNode.rowIndex;
+			var jVert = oliVihrea.parentNode.cellIndex;
+		
+			if(((iVert-1)<= iIndex && iIndex<=(iVert+1))&&((jVert-1)<= jIndex && jIndex<=(jVert+1))){
+				valittu.appendChild(oliVihrea);
+				var vuoroKuva = document.getElementById("vuoro");
+				var blueVuoro = document.createElement("img");
+				blueVuoro.src = "blue.svg";
+				blueVuoro.alt ="blue";
+				vuoroKuva.parentNode.replaceChild(blueVuoro,vuoroKuva);
+				blueVuoro.setAttribute("id","vuoro");
+			}
+			
+			else{
+				var iDelta = (iIndex-iVert)/2;
+				var jDelta = (jIndex-jVert)/2;
+				if((iDelta==-1 || iDelta==0 || iDelta==1)&&(jDelta==-1 || jDelta==0 || jDelta==1)){
+					var rivit=valittu.parentNode.parentNode.getElementsByTagName("tr");
+				    var theSolu = rivit[iVert+iDelta].getElementsByTagName("td")[jVert+jDelta];
+					if(theSolu.firstChild){
+						valittu.appendChild(oliVihrea);
+						var vuoroKuva = document.getElementById("vuoro");
+						var blueVuoro = document.createElement("img");
+						blueVuoro.src = "blue.svg";
+						blueVuoro.alt ="blue";
+						vuoroKuva.parentNode.replaceChild(blueVuoro,vuoroKuva);
+						blueVuoro.setAttribute("id","vuoro");
+					}
+				}
+			}	
+			
+			
+	
+		}
+	}
+}
+
+	
+
+
+function sinisenVuoro(valittu){
+	var kuvat = document.getElementsByTagName("img");
+	
+	var iIndex = valittu.parentNode.rowIndex;
+	var jIndex = valittu.cellIndex;
+	
+	var red = document.createElement("img");
+	red.src = "red.svg";
+	red.alt ="red";
+	
+	var blue = document.createElement("img");
+	blue.src = "blue.svg";
+	blue.alt ="blue";
+	
+	//JOtain pielessä
+	
+	var oliVihrea;
+	//nollaaVihrea(red,blue,oliVihrea, kuvat);
+	
+	for(var i=0;i<kuvat.length;i++){
+		if(kuvat[i].alt == "redgreen" ){
+			vihr = kuvat[i];
+			oliVihrea = red;
+			vihr.parentNode.replaceChild(oliVihrea,vihr);
+		}
+		if(kuvat[i].alt == "bluegreen"){
+			var vihr = kuvat[i];
+			oliVihrea = blue;
+			vihr.parentNode.replaceChild(oliVihrea,vihr);
+		}
+	}
+	
+	if(valittu.firstChild){
+		
+	var vaihdettava = valittu.firstChild;
+	
+	if(vaihdettava.alt == "blue"){
+		var bluegreen = document.createElement("img");
+        bluegreen.src = "green.svg";
+	    bluegreen.alt ="bluegreen";
+		valittu.replaceChild(bluegreen,vaihdettava);
+	}
+	
+	}
+	else{
+		if(oliVihrea){
+			
+			var iVert = oliVihrea.parentNode.parentNode.rowIndex;
+			var jVert = oliVihrea.parentNode.cellIndex;
+			
+			if(((iVert-1)<= iIndex && iIndex<=(iVert+1))&&((jVert-1)<= jIndex && jIndex<=(jVert+1))){
+				valittu.appendChild(oliVihrea);
+				var vuoroKuva = document.getElementById("vuoro");
+				var redVuoro = document.createElement("img");
+				redVuoro.src = "red.svg";
+				redVuoro.alt ="red";
+				vuoroKuva.parentNode.replaceChild(redVuoro,vuoroKuva);
+				redVuoro.setAttribute("id","vuoro");
+			}
+			
+			else{
+				var iDelta = (iIndex-iVert)/2;
+				var jDelta = (jIndex-jVert)/2;
+				if((iDelta==-1 || iDelta==0 || iDelta==1)&&(jDelta==-1 || jDelta==0 || jDelta==1)){
+					var rivit=valittu.parentNode.parentNode.getElementsByTagName("tr");
+				    var theSolu = rivit[iVert+iDelta].getElementsByTagName("td")[jVert+jDelta];
+					if(theSolu.firstChild){
+						valittu.appendChild(oliVihrea);
+						var vuoroKuva = document.getElementById("vuoro");
+						var redVuoro = document.createElement("img");
+						redVuoro.src = "red.svg";
+						redVuoro.alt ="red";
+						vuoroKuva.parentNode.replaceChild(redVuoro,vuoroKuva);
+						redVuoro.setAttribute("id","vuoro");
+					}
+				}
+			}
+			
+		}
+	}
+}
+/*
+function nollaaVihrea(red,blue,oliVihrea,kuvat){
+	for(var i=0;i<kuvat.length;i++){
+		if(kuvat[i].alt == "redgreen" ){
+			vihr = kuvat[i];
+			oliVihrea = red;
+			vihr.parentNode.replaceChild(oliVihrea,vihr);
+		}
+		if(kuvat[i].alt == "bluegreen"){
+			var vihr = kuvat[i];
+			oliVihrea = blue;
+			vihr.parentNode.replaceChild(oliVihrea,vihr);
+		}
+	}
+}*/
