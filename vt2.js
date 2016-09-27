@@ -1,5 +1,9 @@
 /*javascript koodi, vt2*/
-"use strict";
+"use strict";  
+/*
+Pitäisi saada toimimaan, että hypynjälkeen voi vain hyppiä ja 
+maalialueelta ei saa poistua
+*/
 window.onload = function() {
 
 	var ruutuLkm = 8;
@@ -11,26 +15,7 @@ window.onload = function() {
 	
 	var syottoAlue = document.getElementById("ruudukko");
 	
-	//var vuoroAlue = document.createElement("div");
-	//syottoAlue.appendChild(vuoroAlue);
-	/*
-	var redVuoro = document.createElement("img");
-	redVuoro.src = "red.svg";
-	redVuoro.alt ="red";
-	//redVuoro.setAttribute = ("id","vuoro");
-	
-	var blueVuoro = document.createElement("img");
-	blueVuoro.src = "blue.svg";
-	blueVuoro.alt ="blue";
-	//blueVuoro.setAttribute = ("id","vuoro");
-	
-	if(vuoro == 0){
-		vuoroAlue.appendChild(redVuoro);
-	}
-	else
-		vuoroAlue.appendChild(blueVuoro);
-	vuoroAlue.firstChild.setAttribute("id","vuoro");
-	*/
+
 	var field = syottoAlue.getElementsByTagName("fieldset")[0];
 	
 	// Luodaan radionappulakenttä
@@ -109,6 +94,7 @@ function luonti(e){
 	
 	var vuoroAlue = document.createElement("div"); /// Luodaan täälläkin vuoroalue
 	syottoAlue.replaceChild(vuoroAlue,vaihdettava);
+	vuoroAlue.setAttribute("id","vuoroAlue");
 	
 	var red = document.createElement("img");
 	red.src = "red.svg";
@@ -223,11 +209,13 @@ function luoRuudut(syote, napLkm, vuoro){
 				var solu=document.createElement("td");
 				solu.addEventListener("click",klikkaus);
 				rivi.appendChild(solu);
+				solu.setAttribute("title","");
 				if( j > ((syote-1)-(napLkm+2-i))){
 				   var red = document.createElement("img");
 		           red.src = "red.svg";
 		           red.alt ="red";
 				   solu.appendChild(red);
+				   solu.setAttribute("title","blueMaali");
 				   }
 				   	
 				if ( j < ((napLkm+2)-(syote-1-i))){
@@ -235,6 +223,7 @@ function luoRuudut(syote, napLkm, vuoro){
 					blue.src = "blue.svg";
 					blue.alt ="blue";
 					solu.appendChild(blue);
+					solu.setAttribute("title","redMaali");
 				}
 					
 			}
@@ -267,7 +256,7 @@ function asetaVuoro(){
 	
 	var vuoroAlue = document.createElement("div");
 	
-	
+	vuoroAlue.setAttribute("id","vuoroAlue");
 	
 	syottoAlue.appendChild(vuoroAlue);
 	
@@ -350,6 +339,11 @@ function punaisenVuoro(valittu){
 				blueVuoro.alt ="blue";
 				vuoroKuva.parentNode.replaceChild(blueVuoro,vuoroKuva);
 				blueVuoro.setAttribute("id","vuoro");
+				
+				if(document.getElementById("vuoronappi"))
+					document.getElementById("vuoroAlue").removeChild(document.getElementById("vuoroAlue").lastChild);
+				
+				tarkistaPun();
 			}
 			
 			else{
@@ -360,20 +354,45 @@ function punaisenVuoro(valittu){
 				    var theSolu = rivit[iVert+iDelta].getElementsByTagName("td")[jVert+jDelta];
 					if(theSolu.firstChild){
 						valittu.appendChild(oliVihrea);
-						var vuoroKuva = document.getElementById("vuoro");
-						var blueVuoro = document.createElement("img");
-						blueVuoro.src = "blue.svg";
-						blueVuoro.alt ="blue";
-						vuoroKuva.parentNode.replaceChild(blueVuoro,vuoroKuva);
-						blueVuoro.setAttribute("id","vuoro");
+						
+						//korvataan valinnaisella vuoronvaihdolla
+						
+						tarkistaPun();
+						
+						var vuoroAlue=document.getElementById("vuoroAlue");
+						var nappi = document.createElement("input","button");
+						
+						if(document.getElementById("vuoronappi")){
+							vuoroAlue.replaceChild(nappi, vuoroAlue.lastChild);
+						}
+						else	
+							vuoroAlue.appendChild(nappi);
+						
+						nappi.setAttribute("id","vuoronappi");
+						nappi.setAttribute("value","Lopeta vuoro")
+						nappi.addEventListener("click",lopetaVuoroPun);
+						/*vuoroKuva.parentNode.replaceChild(blueVuoro,vuoroKuva);
+						blueVuoro.setAttribute("id","vuoro");*/
+						
+						
 					}
 				}
 			}	
-			
-			
-	
 		}
 	}
+}
+
+function lopetaVuoroPun(){
+	var vuoroAlue=document.getElementById("vuoroAlue");
+	vuoroAlue.removeChild(vuoroAlue.lastChild);
+	
+	var vuoroKuva = document.getElementById("vuoro");
+	var blueVuoro = document.createElement("img");
+	blueVuoro.src = "blue.svg";
+	blueVuoro.alt ="blue";
+	
+	vuoroAlue.replaceChild(blueVuoro,vuoroKuva);
+	blueVuoro.setAttribute("id","vuoro");
 }
 
 	
@@ -437,6 +456,11 @@ function sinisenVuoro(valittu){
 				redVuoro.alt ="red";
 				vuoroKuva.parentNode.replaceChild(redVuoro,vuoroKuva);
 				redVuoro.setAttribute("id","vuoro");
+				
+				if(document.getElementById("vuoronappi"))
+					document.getElementById("vuoroAlue").removeChild(document.getElementById("vuoroAlue").lastChild);
+				
+				tarkistaSin();
 			}
 			
 			else{
@@ -447,18 +471,83 @@ function sinisenVuoro(valittu){
 				    var theSolu = rivit[iVert+iDelta].getElementsByTagName("td")[jVert+jDelta];
 					if(theSolu.firstChild){
 						valittu.appendChild(oliVihrea);
+						
+						tarkistaSin();
+						/*
 						var vuoroKuva = document.getElementById("vuoro");
 						var redVuoro = document.createElement("img");
 						redVuoro.src = "red.svg";
 						redVuoro.alt ="red";
 						vuoroKuva.parentNode.replaceChild(redVuoro,vuoroKuva);
 						redVuoro.setAttribute("id","vuoro");
+						*/
+						var vuoroAlue=document.getElementById("vuoroAlue");
+						var nappi = document.createElement("input","button");
+						
+						if(document.getElementById("vuoronappi")){
+							vuoroAlue.replaceChild(nappi, vuoroAlue.lastChild);
+						}
+						else	
+							vuoroAlue.appendChild(nappi);
+						
+						nappi.setAttribute("id","vuoronappi");
+						nappi.setAttribute("value","Lopeta vuoro")
+						nappi.addEventListener("click",lopetaVuoroSin);
+						
+						
 					}
 				}
 			}
 			
 		}
 	}
+}
+
+function lopetaVuoroSin(){
+	var vuoroAlue=document.getElementById("vuoroAlue");
+	vuoroAlue.removeChild(vuoroAlue.lastChild);
+	
+	var vuoroKuva = document.getElementById("vuoro");
+	var redVuoro = document.createElement("img");
+	redVuoro.src = "red.svg";
+	redVuoro.alt ="red";
+	
+	vuoroAlue.replaceChild(redVuoro,vuoroKuva);
+	redVuoro.setAttribute("id","vuoro");
+}
+
+function tarkistaPun(){
+	var elementit = document.getElementsByTagName("td");
+	var maali=[];
+	for(var i=0; i<elementit.length ; i++){
+		if(elementit[i].title == "redMaali"){
+			maali.push(elementit[i]);
+		}
+	}
+	for(var i=0 ; i<maali.length ; i++){
+		if(!(maali[i].firstChild))
+			return;
+		if(!(maali[i].firstChild.alt=="red")) return;
+	}
+	console.log("punainen voitti");
+	voitto("Punainen");
+}
+
+function tarkistaSin(){
+	var elementit = document.getElementsByTagName("td");
+	var maali=[];
+	for(var i=0; i<elementit.length ; i++){
+		if(elementit[i].title == "blueMaali"){
+			maali.push(elementit[i]);
+		}
+	}
+	for(var i=0 ; i<maali.length ; i++){
+		if(!(maali[i].firstChild))
+			return;
+		if(!(maali[i].firstChild.alt=="blue")) return;
+	}
+	console.log("Sininen voitti");
+	voitto("Sininen");
 }
 /*
 function nollaaVihrea(red,blue,oliVihrea,kuvat){
@@ -475,3 +564,17 @@ function nollaaVihrea(red,blue,oliVihrea,kuvat){
 		}
 	}
 }*/
+
+function voitto(teksti){
+	
+	document.getElementById("varod").textContent = teksti+" voitti!";
+	
+	var taulukko=document.getElementsByTagName("table");
+	var rivit = document.getElementsByTagName("tr");
+	for(var i=0;i<rivit.length;i++){
+		var solut=rivit[i].getElementsByTagName("td");
+		for(var j=0;j<solut.length;j++){
+			solut[j].removeEventListener("click",klikkaus);
+		}
+	}
+}
