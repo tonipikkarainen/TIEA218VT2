@@ -16,13 +16,13 @@ table {
  */
  
 .musta:nth-child(even) {
-    background: black;
+    background-color: black;
 }
 
 .valko:nth-child(odd) {
-    background: black;
+    background-color: black;
 }
-
+	
 td{
     text-align:center;
 
